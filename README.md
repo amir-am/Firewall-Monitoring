@@ -16,6 +16,10 @@ The mentioned dashboard includes the following item:
 - Port Summary
 
 In the pictures below, you can see the dashboard visualizations:
+![image](https://user-images.githubusercontent.com/43276746/172603092-78fceb08-9d0a-45fe-a556-00c7eef7e009.png)
+![image](https://user-images.githubusercontent.com/43276746/172603261-ceaa3057-d498-457e-a59b-88b61feda760.png)
+![image](https://user-images.githubusercontent.com/43276746/172603765-84f7d7ae-8a3f-407b-9b06-c2c05ed7c56e.png)
+
 
 Requirements:
 - Grafana: https://grafana.com/grafana/download
