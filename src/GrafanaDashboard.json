@@ -37,12 +37,6 @@
     },
     {
       "type": "panel",
-      "id": "table-old",
-      "name": "Table (old)",
-      "version": ""
-    },
-    {
-      "type": "panel",
       "id": "timeseries",
       "name": "Time series",
       "version": ""
@@ -84,6 +78,7 @@
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "An administratively-assigned name for this managed node. By convention, this is the node's fully-qualified domain name. If the name is unknown, the value is the zero-length string",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -102,7 +97,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -113,7 +108,7 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 16,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -184,6 +179,103 @@
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "A textual description of the entity. This value should include the full name and version identification of the system's hardware type, software operating-system, and networking software",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 16,
+        "x": 0,
+        "y": 2
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.4",
+      "targets": [
+        {
+          "alias": "OS Version",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "limit": "",
+          "measurement": "YOUR-NAME",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"os_version\") FROM \"Afranet-R5_interfaces\" WHERE $timeFilter GROUP BY \"hostname\"",
+          "queryType": "randomWalk",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "os_version"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "OS Version"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB-NETWORK}"
+      },
+      "description": "The time (in hundredths of a second) since the network management portion of the system was last re-initialized",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -202,7 +294,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "yellow",
+                "color": "dark-orange",
                 "value": null
               }
             ]
@@ -215,7 +307,7 @@
         "h": 2,
         "w": 8,
         "x": 16,
-        "y": 0
+        "y": 2
       },
       "id": 19,
       "links": [],
@@ -289,24 +381,37 @@
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "High-availability mode",
       "fieldConfig": {
         "defaults": {
           "color": {
             "fixedColor": "orange",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
-          "custom": {
-            "align": "auto",
-            "displayMode": "color-text",
-            "filterable": false,
-            "inspect": false
-          },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "index": 0,
+                  "text": "standalone"
+                },
+                "2": {
+                  "index": 1,
+                  "text": "activeActive"
+                },
+                "3": {
+                  "index": 2,
+                  "text": "activePassive"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -315,27 +420,34 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 24,
+        "h": 2,
+        "w": 12,
         "x": 0,
-        "y": 2
+        "y": 4
       },
-      "id": 35,
+      "id": 52,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
           ],
-          "show": false
+          "fields": "/^HA System Mode$/",
+          "values": false
         },
-        "frameIndex": 0,
-        "showHeader": false,
-        "sortBy": []
+        "textMode": "auto"
       },
       "pluginVersion": "8.5.4",
       "targets": [
         {
+          "alias": "HA System Mode",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
           "groupBy": [],
           "hide": false,
           "limit": "",
@@ -346,12 +458,12 @@
           "queryType": "randomWalk",
           "rawQuery": false,
           "refId": "A",
-          "resultFormat": "table",
+          "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "os_version"
+                  "ha_mode"
                 ],
                 "type": "field"
               },
@@ -364,20 +476,109 @@
           "tags": []
         }
       ],
-      "title": "OS Version",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "last"
-              ]
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB-NETWORK}"
+      },
+      "description": "Configuration of an automatic configuration synchronization",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "color": "dark-red",
+                  "index": 0,
+                  "text": "disabled"
+                },
+                "2": {
+                  "color": "dark-green",
+                  "index": 1,
+                  "text": "enabled"
+                }
+              },
+              "type": "value"
             }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              }
+            ]
           }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 53,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^HA Auto Sync$/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.4",
+      "targets": [
+        {
+          "alias": "HA Auto Sync",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "limit": "",
+          "measurement": "YOUR-NAME",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"os_version\") FROM \"Afranet-R5_interfaces\" WHERE $timeFilter GROUP BY \"hostname\"",
+          "queryType": "randomWalk",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ha_auto_sync"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
-      "type": "table"
+      "transformations": [],
+      "type": "stat"
     },
     {
       "alert": {
@@ -432,14 +633,19 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "YOUR-NAME CPU alert",
+        "name": "Part YOUR-NAME CPU alert",
         "noDataState": "ok",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "NQFdum6Zk"
+          }
+        ]
       },
       "datasource": {
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "Current CPU usage",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -513,7 +719,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 6
       },
       "id": 21,
       "options": {
@@ -546,12 +752,6 @@
                 "$__interval"
               ],
               "type": "time"
-            },
-            {
-              "params": [
-                "cpu_physical_index"
-              ],
-              "type": "tag"
             },
             {
               "params": [
@@ -609,7 +809,7 @@
             },
             "query": {
               "params": [
-                "A",
+                "B",
                 "5m",
                 "now"
               ]
@@ -625,14 +825,19 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "YOUR-NAME Memory alert",
+        "name": "Part YOUR-NAME Memory alert",
         "noDataState": "ok",
-        "notifications": []
+        "notifications": [
+          {
+            "uid": "NQFdum6Zk"
+          }
+        ]
       },
       "datasource": {
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "Current memory utilization",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -699,6 +904,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "usage"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -706,7 +926,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 6
       },
       "id": 38,
       "options": {
@@ -751,7 +971,7 @@
           "measurement": "YOUR-NAME",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "A",
+          "refId": "B",
           "resultFormat": "time_series",
           "select": [
             [
@@ -763,7 +983,7 @@
               },
               {
                 "params": [],
-                "type": "last"
+                "type": "mean"
               }
             ]
           ],
@@ -786,6 +1006,7 @@
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "The total number of octets received and transmitted on the interface, including framing characters. Discontinuities in the value of this counter can occur at re-initialization of the management system, and at other times as indicated by the value of ifCounterDiscontinuityTime",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -838,7 +1059,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 14
       },
       "id": 26,
       "interval": "1s",
@@ -852,7 +1073,9 @@
             "lastNotNull"
           ],
           "displayMode": "table",
-          "placement": "bottom"
+          "placement": "bottom",
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -862,7 +1085,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "alias": "$tag_description",
+          "alias": "$tag_ifName",
           "datasource": {
             "type": "influxdb",
             "uid": "${DS_INFLUXDB-NETWORK}"
@@ -884,7 +1107,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  NON_NEGATIVE_DERIVATIVE(last(\"ifInOctets\"), 1s) *8 FROM \"YOUR-NAME\" WHERE (\"ifOperStatus\"=1) AND $timeFilter GROUP BY time($__interval), \"description\" fill(none)",
+          "query": "SELECT  NON_NEGATIVE_DERIVATIVE(last(\"ifInOctets\"), 1s) *8 FROM \"YOUR-NAME\" WHERE (\"ifOperStatus\"=1) AND $timeFilter GROUP BY time($__interval), \"ifName\" fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -905,7 +1128,7 @@
           "tags": []
         }
       ],
-      "title": "I/O Data Rate (IN)",
+      "title": "Data Rate (IN)",
       "transformations": [],
       "type": "timeseries"
     },
@@ -966,7 +1189,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 14
       },
       "id": 51,
       "interval": "1s",
@@ -980,7 +1203,9 @@
             "lastNotNull"
           ],
           "displayMode": "table",
-          "placement": "bottom"
+          "placement": "bottom",
+          "sortBy": "Last *",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -990,7 +1215,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "alias": "$tag_description",
+          "alias": "$tag_ifName",
           "datasource": {
             "type": "influxdb",
             "uid": "${DS_INFLUXDB-NETWORK}"
@@ -1012,7 +1237,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  NON_NEGATIVE_DERIVATIVE(last(\"ifOutOctets\"), 1s) *8 FROM \"YOUR-NAME\" WHERE (\"ifOperStatus\"=1) AND $timeFilter GROUP BY time($__interval), \"description\" fill(none)",
+          "query": "SELECT  NON_NEGATIVE_DERIVATIVE(last(\"ifOutOctets\"), 1s) *8 FROM \"YOUR-NAME\" WHERE (\"ifOperStatus\"=1) AND $timeFilter GROUP BY time($__interval), \"ifName\" fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1033,7 +1258,7 @@
           "tags": []
         }
       ],
-      "title": "I/O Data Rate (OUT)",
+      "title": "Data Rate (OUT)",
       "type": "timeseries"
     },
     {
@@ -1041,38 +1266,17 @@
         "type": "influxdb",
         "uid": "${DS_INFLUXDB-NETWORK}"
       },
+      "description": "An entry containing management information applicable to a particular interface",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true,
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1081,481 +1285,484 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          },
-          "unit": "none"
+          }
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "CPU"
+              "options": "Status"
             },
             "properties": [
               {
-                "id": "color",
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "dark-green",
+                        "index": 0,
+                        "text": "up"
+                      },
+                      "2": {
+                        "color": "dark-red",
+                        "index": 1,
+                        "text": "down"
+                      },
+                      "3": {
+                        "color": "dark-orange",
+                        "index": 2,
+                        "text": "testing"
+                      },
+                      "4": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "unknown"
+                      },
+                      "5": {
+                        "color": "dark-red",
+                        "index": 4,
+                        "text": "dormant"
+                      },
+                      "6": {
+                        "color": "dark-red",
+                        "index": 5,
+                        "text": "not present"
+                      },
+                      "7": {
+                        "color": "dark-red",
+                        "index": 6,
+                        "text": "lower layer down"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bandwidth (Max)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bps"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "thresholds",
                 "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-orange",
+                      "value": 100000000
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 1000000000
+                    }
+                  ]
                 }
+              },
+              {
+                "id": "custom.width",
+                "value": 148
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "In Errors"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Out Errors"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 133
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "index": 0,
+                        "text": "other"
+                      },
+                      "6": {
+                        "index": 1,
+                        "text": "ethernetCsmacd"
+                      },
+                      "24": {
+                        "index": 2,
+                        "text": "softwareLoopback"
+                      },
+                      "53": {
+                        "index": 3,
+                        "text": "propVirtual"
+                      },
+                      "131": {
+                        "index": 4,
+                        "text": "tunnel"
+                      },
+                      "135": {
+                        "index": 5,
+                        "text": "l2vlan"
+                      },
+                      "161": {
+                        "index": 6,
+                        "text": "ieee8023adLag"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 202
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Alias"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 387
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 178
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Index"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 125
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Network Mask"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 188
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IP Address"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 196
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 25
-      },
-      "id": 46,
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "max",
-            "mean",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "alias": "$col",
-          "hide": false,
-          "query": "SELECT mean(ifInErrors) as \"In\", mean(ifOutErrors) as \"Out\" FROM \"YOUR-NAME\" WHERE  $timeFilter GROUP BY time(1m) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series"
-        }
-      ],
-      "title": "Errors",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB-NETWORK}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "CPU"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 25
-      },
-      "id": 47,
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "max",
-            "mean",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "alias": "$col",
-          "hide": false,
-          "query": "SELECT mean(ifInDiscards) as \"In\", mean(ifOutDiscards) as \"Out\" FROM \"YOUR-NAME\" WHERE  $timeFilter GROUP BY time(1m) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series"
-        }
-      ],
-      "title": "Discards",
-      "type": "timeseries"
-    },
-    {
-      "columns": [],
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB-NETWORK}"
-      },
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 22,
+        "h": 18,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 26
       },
       "id": 40,
       "links": [],
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 0,
-        "desc": false
+      "options": {
+        "footer": {
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Name"
+          }
+        ]
       },
-      "styles": [
-        {
-          "$$hashKey": "object:502",
-          "alias": "Status",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "Status",
-          "thresholds": [
-            "2",
-            "2"
-          ],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "$$hashKey": "object:604",
-              "text": "up",
-              "value": "1"
-            },
-            {
-              "$$hashKey": "object:605",
-              "text": "down",
-              "value": "2"
-            },
-            {
-              "$$hashKey": "object:606",
-              "text": "testing",
-              "value": "3"
-            },
-            {
-              "$$hashKey": "object:607",
-              "text": "unknown",
-              "value": "4"
-            },
-            {
-              "$$hashKey": "object:608",
-              "text": "dormant",
-              "value": "5"
-            },
-            {
-              "$$hashKey": "object:609",
-              "text": "not present",
-              "value": "6"
-            },
-            {
-              "$$hashKey": "object:610",
-              "text": "lower layer down",
-              "value": "7"
-            }
-          ]
-        },
-        {
-          "$$hashKey": "object:503",
-          "alias": "Speed",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "Speed",
-          "thresholds": [
-            "100000000",
-            "1000000000"
-          ],
-          "type": "number",
-          "unit": "bps"
-        },
-        {
-          "$$hashKey": "object:504",
-          "alias": "In Errors",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "InErrors",
-          "thresholds": [
-            "1",
-            "1"
-          ],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:505",
-          "alias": "Out Errors",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "OutErrors",
-          "thresholds": [
-            "1",
-            "1"
-          ],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:506",
-          "alias": "Transmitted",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Transmitted",
-          "thresholds": [],
-          "type": "number",
-          "unit": "decbytes"
-        },
-        {
-          "$$hashKey": "object:507",
-          "alias": "Last Change",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "LastChange",
-          "thresholds": [],
-          "type": "number",
-          "unit": "s"
-        },
-        {
-          "$$hashKey": "object:4309",
-          "alias": "In Discards",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "InDiscards",
-          "thresholds": [
-            "1",
-            "1"
-          ],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:4353",
-          "alias": "Out Discards",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "OutDiscards",
-          "thresholds": [
-            "1",
-            "1"
-          ],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:2722",
-          "alias": "Port",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "index",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        }
-      ],
+      "pluginVersion": "8.5.4",
       "targets": [
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
           "groupBy": [
             {
               "params": [
-                "$__interval"
+                "ifIndex"
               ],
-              "type": "time"
+              "type": "tag"
             },
             {
               "params": [
-                "null"
+                "ifName"
               ],
-              "type": "fill"
+              "type": "tag"
             }
           ],
           "hide": false,
+          "measurement": "YOUR-NAME",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"ifOperStatus\") AS \"Status\", last(\"description\") AS \"Interface\", last(\"alias\") AS Alias, last(\"ifSpeed\") AS \"Speed\", last(\"ifLastChange\") / 100 AS \"LastChange\", last(\"ifInErrors\") AS \"InErrors\", last(\"ifOutErrors\") AS \"OutErrors\", last(\"ifInDiscards\") AS \"InDiscards\", last(\"ifOutDiscards\") AS \"OutDiscards\", last(\"ifInOctets\") + last(\"ifOutOctets\") AS \"Transmitted\", last(\"ifPhysAddress\") AS \"MAC Address\" FROM \"YOUR-NAME\" WHERE  $timeFilter GROUP BY \"index\"",
-          "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
           "select": [
             [
               {
                 "params": [
-                  "value"
+                  "ifAlias"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "mean"
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ifHighSpeed"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              },
+              {
+                "params": [
+                  " *1000000"
+                ],
+                "type": "math"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ifInErrors"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ifOperStatus"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ifOutErrors"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ifType"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
               }
             ]
           ],
           "tags": []
         },
         {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
           "groupBy": [
             {
               "params": [
-                "$__interval"
+                "ifIndex"
               ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
+              "type": "tag"
             }
           ],
           "hide": false,
+          "measurement": "YOUR-NAME",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"ip\") AS \"IP Address\", last(\"net_mask\") AS \"Net Mask\" FROM \"YOUR-NAME\" WHERE  $timeFilter GROUP BY \"index\"",
-          "rawQuery": true,
           "refId": "B",
           "resultFormat": "table",
           "select": [
             [
               {
                 "params": [
-                  "value"
+                  "ip"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "mean"
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "net_mask"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
               }
             ]
           ],
@@ -1563,12 +1770,11 @@
         }
       ],
       "title": "Port Summary",
-      "transform": "table",
       "transformations": [
         {
           "id": "seriesToColumns",
           "options": {
-            "byField": "index"
+            "byField": "ifIndex"
           }
         },
         {
@@ -1579,32 +1785,502 @@
               "Time 2": true
             },
             "indexByName": {
-              "Alias": 4,
-              "IP Address": 13,
-              "InDiscards": 10,
-              "InErrors": 7,
-              "Interface": 0,
-              "LastChange": 6,
-              "MAC Address": 15,
-              "Net Mask": 14,
-              "OutDiscards": 11,
-              "OutErrors": 8,
-              "Speed": 5,
-              "Status": 3,
-              "Time 1": 2,
-              "Time 2": 12,
-              "Transmitted": 9,
-              "index": 1
+              "Time 1": 10,
+              "Time 2": 11,
+              "ifIndex": 1,
+              "ifName": 0,
+              "last 1": 2,
+              "last 2": 4,
+              "last_1 1": 6,
+              "last_1 2": 5,
+              "last_2": 8,
+              "last_3": 3,
+              "last_4": 9,
+              "last_5": 7
             },
             "renameByName": {
+              "IP Address": "IP Address",
               "Interface": "",
-              "Net Mask": "",
-              "index": ""
+              "Net Mask": "Network Mask",
+              "Time 1": "",
+              "dd": "Status",
+              "ifIndex": "Index",
+              "ifName": "Name",
+              "index": "",
+              "last": "Alias",
+              "last 1": "Alias",
+              "last 2": "IP Address",
+              "last_1": "Bandwidth (Max)",
+              "last_1 1": "Bandwidth (Max)",
+              "last_1 2": "Network Mask",
+              "last_2": "In Errors",
+              "last_3": "Status",
+              "last_4": "Out Errors",
+              "last_5": "Type",
+              "last_last": "Transmitted"
             }
           }
         }
       ],
-      "type": "table-old"
+      "type": "table"
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "keep_state",
+        "for": "1s",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Part HA Stats - Sync Status alert",
+        "noDataState": "ok",
+        "notifications": [
+          {
+            "uid": "NQFdum6Zk"
+          }
+        ]
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB-NETWORK}"
+      },
+      "description": "Statistics for a particular HA cluster's unit",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sync Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-red",
+                        "index": 0,
+                        "text": "unsynchronized"
+                      },
+                      "1": {
+                        "color": "dark-green",
+                        "index": 1,
+                        "text": "synchronized"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "id": 55,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.5.4",
+      "targets": [
+        {
+          "alias": "$tag_ha_stats_index",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "ha_stats_index"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "YOUR-NAME",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ha_stats_sync_status"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "op": "lt",
+          "value": 1,
+          "visible": true
+        }
+      ],
+      "title": "HA Stats",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB-NETWORK}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Net Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Kbits"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sync Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-red",
+                        "index": 0,
+                        "text": "unsynchronized"
+                      },
+                      "1": {
+                        "color": "dark-green",
+                        "index": 1,
+                        "text": "synchronized"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 56,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB-NETWORK}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "ha_stats_index"
+              ],
+              "type": "tag"
+            }
+          ],
+          "measurement": "YOUR-NAME",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "ha_stats_cpu_usage"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ha_stats_memory_usage"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ha_stats_net_usage"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ha_stats_ses_count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ha_stats_hostname"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "ha_stats_sync_status"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "last",
+                "last_1",
+                "last_2",
+                "last_3",
+                "last_4",
+                "last_5",
+                "ha_stats_index"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "ha_stats_index": 0,
+              "last": 2,
+              "last_1": 3,
+              "last_2": 4,
+              "last_3": 5,
+              "last_4": 1,
+              "last_5": 6
+            },
+            "renameByName": {
+              "ha_stats_index": "Index",
+              "last": "CPU Usage",
+              "last_1": "Memory Usage",
+              "last_2": "Net Usage",
+              "last_3": "Session Count",
+              "last_4": "Hostname",
+              "last_5": "Sync Status",
+              "switch-num-current": "Switch Num Current",
+              "switch_num_current": "Switch Num Current"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "1m",
@@ -1634,7 +2310,7 @@
   },
   "timezone": "",
   "title": "Firewall",
-  "uid": "firewall",
-  "version": 1,
+  "uid": "YOUR-NAME",
+  "version": 3,
   "weekStart": ""
 }
