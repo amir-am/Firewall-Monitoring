@@ -6,19 +6,22 @@ It should be noted that the SNMP V3 protocol has been used to monitor these devi
 
 The mentioned dashboard includes the following item:
 - Hostname
-- Uptime
 - OS Version
+- Uptime
+- HA System Mode
+- HA Auto Sync
 - CPU Usage
 - Memory Usage
 - Input / Output Data Rate
-- Errors
-- Discards
-- Port Summary
+- Port Summary (Name, Index, Alias, Status, IP Address, Network Mask, Bandwidth, Type, In Errors, Out Errors)
+- HA States (Index, Hostname, CPU Usage, Memory Usage, Net Usage, Session Count, Sync Status)
+
 
 In the pictures below, you can see the dashboard visualizations:
-![image](https://user-images.githubusercontent.com/43276746/172603092-78fceb08-9d0a-45fe-a556-00c7eef7e009.png)
-![image](https://user-images.githubusercontent.com/43276746/172603950-bcbc4eb8-035d-4bee-bddf-695702911c09.png)
-![image](https://user-images.githubusercontent.com/43276746/172603765-84f7d7ae-8a3f-407b-9b06-c2c05ed7c56e.png)
+
+![image](https://user-images.githubusercontent.com/43276746/178458898-d6a6ab92-3dbf-4a67-a4ad-57c7eacda184.png)
+![image](https://user-images.githubusercontent.com/43276746/178459021-7ecf72ed-7ec9-4755-b020-ff9c28dde393.png)
+![image](https://user-images.githubusercontent.com/43276746/178459306-ccb68fa2-040e-46d1-9883-6e50b3973a8e.png)
 
 
 Requirements:
