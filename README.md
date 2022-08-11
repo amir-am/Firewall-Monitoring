@@ -2,8 +2,6 @@
 
 In order to control the performance of a project and maintain its status, it is necessary to monitor different layers of the project. One of the most important part of network hardwares is firewalls that must be controlled instantly and the device information displayed on the dashboard.
 
-It should be noted that the SNMP V3 protocol has been used to monitor these devices over Grafana platform.
-
 The mentioned dashboard includes the following item:
 - Hostname
 - OS Version
@@ -23,6 +21,7 @@ In the pictures below, you can see the dashboard visualizations:
 ![image](https://user-images.githubusercontent.com/43276746/178459021-7ecf72ed-7ec9-4755-b020-ff9c28dde393.png)
 ![image](https://user-images.githubusercontent.com/43276746/178459306-ccb68fa2-040e-46d1-9883-6e50b3973a8e.png)
 
+It should be noted that the SNMP V3 protocol has been used to monitor these devices over Grafana platform.
 
 Requirements:
 - Grafana: https://grafana.com/grafana/download
